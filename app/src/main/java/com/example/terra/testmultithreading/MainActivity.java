@@ -58,31 +58,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View clickedView) {
-        switch (clickedView.getId()) {
-            case R.id.btnStart:
+        if (clickedView.getId() == R.id.btnStart) {
+            btnStart.setEnabled(false);
+            progressBar.setVisibility(View.VISIBLE);
+            info.setText("");
 
-                btnStart.setEnabled(false);
-                progressBar.setVisibility(View.VISIBLE);
-                info.setText("");
+            Thread downloadFileThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    downloadAllFiles();
+                }
+            });
+            downloadFileThread.start();
+        } else {
+            Log.d(LOG_TAG, "test");
+        }
+    }
 
-                Thread downloadFileThread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        for (int i = 1; i <= 10; i++) {
-                            downloadFile();
-                            handler.sendEmptyMessage(i);
-                        }
-                    }
-                });
-                downloadFileThread.start();
-                break;
-
-            case R.id.btnTest:
-                Log.d(LOG_TAG, "test");
-                break;
-
-            default:
-                break;
+    private void downloadAllFiles() {
+        for (int i = 1; i <= 10; i++) {
+            downloadFile();
+            handler.sendEmptyMessage(i);
         }
     }
 }
